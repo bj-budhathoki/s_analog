@@ -1,26 +1,18 @@
 <script>
   import { onMount } from "svelte";
-  let day = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday"
-  ];
+  import moment from "moment";
   let response;
   let hoursDegree;
   let minutesDegree;
   let secondsDegree;
-  let weekday = day[new Date().getDay()];
-  let today;
+  let weekDay;
+  let todayDate;
   onMount(async () => {
     let res = await fetch(
-      "http://10.10.99.200:8080/client/app/get-data/?appdata_id=0712e6fd-1d99-4962-9701-c0d90797f863"
+      "https://staging.followmedia.tk/client/app/get-data/?appdata_id=09d38a3f-daa9-4d5d-9372-7b4b9103f2ce"
     );
     let data = await res.json();
-    dateFormat = data.appData.dateFormat;
+    console.log("response data ::", data);
     response = data.appData;
     setDate();
   });
@@ -29,17 +21,15 @@
    */
   function setDate() {
     if (response) {
-      let currentDate = new Date()
-        .toLocaleString(response.data.code, {
-          timeZone: response.timeZone,
-          hour12: response.timeFormat === "12 Hours" ? true : false
-        })
-        .split(" ");
-      let currentTime = currentDate[1].split(":");
-      hoursDegree = currentTime[0] * 30 + currentTime[1] * (360 / 720);
-      minutesDegree = currentTime[1] * 6 + currentTime[2] * (360 / 3600);
-      secondsDegree = currentTime[2] * 6;
-      today = currentDate[0];
+      let today = moment().utcOffset("utc+5:45");
+      let hours = today.format("HH");
+      let minutes = today.format("mm");
+      let seconds = today.format("ss");
+      hoursDegree = (parseInt(hours) / 12) * 360;
+      minutesDegree = (parseInt(minutes) / 60) * 360;
+      secondsDegree = (parseInt(seconds) / 60) * 360 + 360;
+      todayDate = today.format("YYYY-MM-DD");
+      weekDay = today.format("dddd");
     }
   }
   setInterval(setDate, 1000);
@@ -67,21 +57,19 @@
     left: 0;
   }
   .clock {
-    background: #ececec;
-    width: 300px;
-    height: 300px;
-    margin: 8% auto 0;
+    width: 30rem;
+    height: 30rem;
     border-radius: 50%;
     border: 14px solid #333;
     position: relative;
     box-shadow: 0 2vw 4vw -1vw rgba(0, 0, 0, 0.8);
+    position: relative;
   }
-
   .dot {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #ccc;
+    background: #000;
     top: 0;
     left: 0;
     right: 0;
@@ -96,10 +84,10 @@
     position: absolute;
     z-index: 5;
     width: 4px;
-    height: 65px;
+    height: 160px;
     background: #333;
     top: 79px;
-    transform-origin: 50% 72px;
+    transform-origin: 50% 164px;
     left: 50%;
     margin-left: -2px;
     border-top-left-radius: 50%;
@@ -110,38 +98,35 @@
     position: absolute;
     z-index: 6;
     width: 4px;
-    height: 100px;
+    height: 190px;
     background: #666;
     top: 46px;
     left: 50%;
     margin-left: -2px;
     border-top-left-radius: 50%;
     border-top-right-radius: 50%;
-    transform-origin: 50% 105px;
+    transform-origin: 50% 195px;
   }
 
   .second-hand {
     position: absolute;
     z-index: 7;
     width: 2px;
-    height: 120px;
+    height: 212px;
     background: gold;
     top: 26px;
     left: 50%;
     margin-left: -1px;
     border-top-left-radius: 50%;
     border-top-right-radius: 50%;
-    transform-origin: 50% 125px;
-    /* transition: all 0.05s;
-    transition-timing-function: cubic-bezier(0.1, 2, 7, 0.58, 1); */
+    transform-origin: 50% 215px;
   }
 
   span {
     display: inline-block;
     position: absolute;
-    color: #333;
+    color: #ffffff;
     font-size: 22px;
-    font-family: "Poiret One";
     font-weight: 700;
     z-index: 4;
   }
@@ -152,7 +137,7 @@
     margin-left: -9px;
   }
   .h3 {
-    top: 140px;
+    top: 48%;
     right: 30px;
   }
   .h6 {
@@ -162,7 +147,7 @@
   }
   .h9 {
     left: 32px;
-    top: 140px;
+    top: 48%;
   }
 
   .diallines {
@@ -170,20 +155,20 @@
     z-index: 2;
     width: 2px;
     height: 15px;
-    background: #666;
+    background: #474747;
     left: 50%;
     margin-left: -1px;
-    transform-origin: 50% 150px;
+    transform-origin: 50% 240px;
   }
   .diallines:nth-of-type(5n) {
     position: absolute;
     z-index: 2;
     width: 4px;
     height: 25px;
-    background: #666;
+    background: #252525;
     left: 50%;
     margin-left: -1px;
-    transform-origin: 50% 150px;
+    transform-origin: 50% 240px;
   }
 
   .info {
@@ -191,36 +176,33 @@
     width: 120px;
     height: 20px;
     border-radius: 7px;
-    background: #ccc;
+    background: #000;
     text-align: center;
     line-height: 20px;
-    color: #000;
-    font-size: 11px;
-    top: 200px;
-    left: 50%;
+    color: #fff;
+    font-size: 15px;
     margin-left: -60px;
     font-family: "Poiret One";
     font-weight: 700;
     z-index: 3;
     letter-spacing: 3px;
-    margin-left: -60px;
     left: 50%;
+    top: 200px;
+    padding: 5px;
   }
   .date {
     top: 80px;
   }
   .day {
-    top: 200px;
+    top: 80%;
   }
 </style>
 
-<div
-  class="clock-wrapper"
-  style="background-image:url('https://cdn.pixabay.com/photo/2012/08/27/14/19/evening-55067_960_720.png')">
+<div class="clock-wrapper" style="background-image:url('/img/bg-day.jpg')">
   <div class="clock">
     <div>
-      <div class="info date">{today}</div>
-      <div class="info day">{weekday}</div>
+      <div class="info date">{todayDate}</div>
+      <div class="info day">{weekDay}</div>
     </div>
     <div class="dot" />
     <div>
@@ -238,6 +220,7 @@
       <span class="h9">9</span>
       <span class="h12">12</span>
     </div>
+
     {#each Array(60) as item, i}
       <div class="diallines" style={`transform:rotate(${6 * i}deg);`} />
     {/each}

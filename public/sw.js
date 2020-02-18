@@ -7,6 +7,7 @@ const appAssets = [
     'global.css',
     './build/bundle.css',
     './build/bundle.js',
+    "./img/bg-day.jpg"
 ]
 // SW Install
 self.addEventListener('install', e => {
@@ -23,6 +24,7 @@ self.addEventListener('activate', e => {
         keys.forEach(key => {
             if (key !== `static-${version}`) {
                 // Clean static cache
+                return caches.delete(key);
             }
         });
     })
@@ -67,7 +69,7 @@ self.addEventListener('fetch', e => {
     if (e.request.url.match(location.origin)) {
         e.respondWith(staticCache(e.request));
     }
-    else {
+    else if (e.request.url.match('staging.followmedia.tk/client/app/get-data')) {
         e.respondWith(fallbackCache(e.request));
     }
 });
