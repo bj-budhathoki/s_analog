@@ -22,6 +22,7 @@ self.addEventListener('activate', e => {
     // Clean static cache
     let cleaned = caches.keys().then(keys => {
         keys.forEach(key => {
+            console.log('SW::activeted', key)
             if (key !== `static-${version}`) {
                 // Clean static cache
                 return caches.delete(key);
@@ -69,11 +70,7 @@ self.addEventListener('fetch', e => {
     if (e.request.url.match(location.origin)) {
         e.respondWith(staticCache(e.request));
     }
-    else if (e.request.url.match('staging.followmedia.tk/client/app/get-data')) {
+    else if (e.request.url.match('staging.followmedia.tk/client/app/get-data/')) {
         e.respondWith(fallbackCache(e.request));
     }
 });
-// self.addEventListener('message', e => {
-//     console.log('message event fire ::', e)
-// })
-
