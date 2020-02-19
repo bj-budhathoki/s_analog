@@ -12,7 +12,6 @@
       "https://staging.followmedia.tk/client/app/get-data/?appdata_id=eafbecdc-70f0-490c-94a9-95043d102bb0"
     );
     let data = await res.json();
-    console.log("response data ::", data);
     response = data.appData;
     setDate();
   });
@@ -21,7 +20,7 @@
    */
   function setDate() {
     if (response) {
-      let today = moment().utcOffset("utc+5:45");
+      let today = moment().utcOffset(response.timeZone || "+5:45");
       let hours = today.format("HH");
       let minutes = today.format("mm");
       let seconds = today.format("ss");
@@ -57,8 +56,8 @@
     left: 0;
   }
   .clock {
-    width: 30rem;
-    height: 30rem;
+    width: 45rem;
+    height: 45rem;
     border-radius: 50%;
     border: 14px solid #333;
     position: relative;
@@ -66,8 +65,8 @@
     position: relative;
   }
   .dot {
-    width: 14px;
-    height: 14px;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
     background: #000;
     top: 0;
@@ -84,10 +83,10 @@
     position: absolute;
     z-index: 5;
     width: 4px;
-    height: 160px;
+    height: 15rem;
     background: #333;
-    top: 79px;
-    transform-origin: 50% 164px;
+    top: 9rem;
+    transform-origin: 50% 13.5rem;
     left: 50%;
     margin-left: -2px;
     border-top-left-radius: 50%;
@@ -98,28 +97,28 @@
     position: absolute;
     z-index: 6;
     width: 4px;
-    height: 190px;
+    height: 20rem;
     background: #666;
-    top: 46px;
+    top: 4.9rem;
     left: 50%;
     margin-left: -2px;
     border-top-left-radius: 50%;
     border-top-right-radius: 50%;
-    transform-origin: 50% 195px;
+    transform-origin: 50% 17.7rem;
   }
 
   .second-hand {
     position: absolute;
     z-index: 7;
     width: 2px;
-    height: 212px;
+    height: 22rem;
     background: gold;
-    top: 26px;
+    top: 3rem;
     left: 50%;
     margin-left: -1px;
     border-top-left-radius: 50%;
     border-top-right-radius: 50%;
-    transform-origin: 50% 215px;
+    transform-origin: 50% 19.7rem;
   }
 
   span {
@@ -158,7 +157,7 @@
     background: #474747;
     left: 50%;
     margin-left: -1px;
-    transform-origin: 50% 240px;
+    transform-origin: 50% 22.5rem;
   }
   .diallines:nth-of-type(5n) {
     position: absolute;
@@ -168,7 +167,7 @@
     background: #252525;
     left: 50%;
     margin-left: -1px;
-    transform-origin: 50% 240px;
+    transform-origin: 50% 22.8rem;
   }
 
   .info {
@@ -195,6 +194,37 @@
   }
   .day {
     top: 80%;
+  }
+  @media screen and (max-width: 780px) {
+    .clock {
+      width: 35rem;
+      height: 35rem;
+    }
+    .hour-hand {
+      height: 12rem;
+      top: 5rem;
+      left: 50%;
+      transform-origin: 50% 10rem;
+    }
+    .minute-hand {
+      height: 14rem;
+      top: 3rem;
+      left: 50%;
+      transform-origin: 50% 14.5rem;
+    }
+    .second-hand {
+      height: 15rem;
+      top: 3rem;
+      left: 50%;
+      transform-origin: 50% 14.5rem;
+    }
+
+    .diallines {
+      transform-origin: 50% 17.5rem;
+    }
+    .diallines:nth-of-type(5n) {
+      transform-origin: 50% 17.5rem;
+    }
   }
 </style>
 
